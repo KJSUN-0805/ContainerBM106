@@ -1,0 +1,57 @@
+-------------Master&Minion------------------------
+sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
+sed -i 's/security.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
+sed -i 's/prohibit-password/yes/g' /etc/ssh/sshd_config
+apt-get update && apt-get upgrade
+apt-get update && apt-get install -y docker.io
+apt-get update && apt-get install -y apt-transport-https
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+apt-get update && apt-get install kubelet kubeadm kubectl
+--------------------------Master----------------------
+#########init the master node#########
+kubeadm init --pod-network-cidr=10.244.0.0/16
+### wait 1 minutes####
+###copy the kubeadm join --token <token> <master-ip>:<master-port> --discovery-token-ca-cert-hash sha256:<hash>####
+###environment variable set
+cp -f /etc/kubernetes/admin.conf $HOME/
+chown $(id -u):$(id -g) $HOME/admin.conf
+export KUBECONFIG=$HOME/admin.conf
+echo "export KUBECONFIG=$HOME/admin.conf" >>  ~/.bash_profile
+#######network-flannel##### for version 1.7+ 
+####kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+####kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+---------------------------Minion---------------------
+#change the hostname different with master
+vi /etc/hostname
+######Paste kubeadm join --token <token> <master-ip>:<master-port> --discovery-token-ca-cert-hash sha256:<hash>####
+#####check pod network###wati to kube-dns running
+kubectl get pods --all-namespaces
+#####check nodes#####
+kubectl get nodes
+
+
+####when the pod is in terminating status
+kubectl delete pod tiller-deploy-75f5797b-2kqxx  --grace-period=0 --force -n kube-system
+
+
+-------------------------------------already error-----------
+kubeadm reset
+systemctl stop kubelet
+systemctl stop docker
+rm -rf /var/lib/cni/
+rm -rf /var/lib/kubelet/*
+rm -rf /etc/cni/
+ifconfig cni0 down
+ifconfig flannel.1 down
+ifconfig docker0 down
+ip link delete cni0
+ip link delete flannel.1
+systemctl start docker.service
+
+
+
+
