@@ -1,0 +1,104 @@
+---
+######################
+## network subnet
+######################
+apiVersion: contivpp.io/v1
+kind: CustomNetwork
+metadata:
+  name: bm-pg-vpp1-l3
+spec:
+  type: L3
+  subnetCIDR: 10.101.0.0/16
+  subnetOneNodePrefixLen: 24
+---
+apiVersion: contivpp.io/v1
+kind: CustomNetwork
+metadata:
+  name: bm-pg-vpp2-l3
+spec:
+  type: L3
+  subnetCIDR: 10.102.0.0/16
+  subnetOneNodePrefixLen: 24
+---
+apiVersion: contivpp.io/v1
+kind: CustomNetwork
+metadata:
+  name: bm-pg-vpp3-l3
+spec:
+  type: L3
+  subnetCIDR: 10.103.0.0/16
+  subnetOneNodePrefixLen: 24
+---
+######################
+## network gateway
+######################
+---
+apiVersion: contivpp.io/v1
+kind: ExternalInterface
+metadata:
+  name: bm-pg-vpp1-l3-gw
+spec:
+  type: L3
+  network: bm-pg-vpp1-l3
+  nodes:
+    # Connx-5 100G
+    - node: bm-pg
+      vppInterfaceName: HundredGigabitEthernet5/10/1
+      ip: 10.101.101.1/24
+      # vppctl ip route add 10.101.1.0/24 table 10 via 10.101.100.101 HundredGigabitEthernet5/10/1
+      #vlan: 301
+ 
+    # Connx-5 100G
+    - node: bm-wk
+      vppInterfaceName: HundredGigabitEthernet18/10/1
+      # vppctl ip route add 10.101.2.0/24 table 10 via 10.101.100.100 HundredGigabitEthernet18/10/1
+      ip: 10.101.101.2/24
+      #vlan: 301
+---
+apiVersion: contivpp.io/v1
+kind: ExternalInterface
+metadata:
+  name: bm-pg-vpp2-l3-gw
+spec:
+  type: L3
+  network: bm-pg-vpp2-l3
+  nodes:
+    # eno1 1G
+    - node: bm-pg
+      vppInterfaceName: VirtualFunctionEthernet3/10/3
+      ip: 10.102.100.1/24
+    - node: bm-pg
+      vppInterfaceName: VirtualFunctionEthernet3/10/7
+      ip: 10.102.101.1/24
+ 
+    # eno1 1G
+    - node: bm-wk
+      vppInterfaceName: VirtualFunctionEthernet3d/6/0
+      ip: 10.102.100.2/24
+    - node: bm-wk
+      vppInterfaceName: VirtualFunctionEthernet3d/6/1
+      ip: 10.102.101.2/24
+---
+apiVersion: contivpp.io/v1
+kind: ExternalInterface
+metadata:
+  name: bm-pg-vpp3-l3-gw
+spec:
+  type: L3
+  network: bm-pg-vpp3-l3
+  nodes:
+    # Connx-4 10G
+    - node: bm-pg
+      vppInterfaceName: TenGigabitEthernet81/0/2
+      ip: 10.103.100.1/24
+    - node: bm-pg
+      vppInterfaceName: TenGigabitEthernet81/8/2
+      ip: 10.103.101.1/24
+ 
+    # Connx-4 10G
+    - node: bm-wk
+      vppInterfaceName: TenGigabitEthernetaf/0/2
+      ip: 10.103.100.2/24
+    - node: bm-wk
+      vppInterfaceName: TenGigabitEthernetaf/8/2
+      ip: 10.103.101.2/24

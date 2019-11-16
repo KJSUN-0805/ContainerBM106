@@ -1,0 +1,8 @@
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: new-pool
+spec:
+  cidr: 10.10.10.0/24
+  ipipMode: CrossSubnet
+  natOutgoing: true

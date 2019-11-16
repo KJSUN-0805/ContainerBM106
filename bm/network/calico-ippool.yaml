@@ -1,0 +1,8 @@
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: test-ippool 
+spec:
+  cidr: 11.168.0.0/16
+  ipipMode: Always
+  natOutgoing: true

@@ -1,0 +1,44 @@
+---
+######################
+## network subnet
+######################
+apiVersion: contivpp.io/v1
+kind: CustomNetwork
+metadata:
+  name: bm-pg-vpp1-l3
+spec:
+  type: L3
+  subnetCIDR: 10.100.0.0/16
+  subnetOneNodePrefixLen: 24
+---
+apiVersion: contivpp.io/v1
+kind: CustomNetwork
+metadata:
+  name: bm-pg-vpp2-l3
+spec:
+  type: L3
+  subnetCIDR: 10.101.0.0/16
+  subnetOneNodePrefixLen: 24
+
+######################
+## network gateway
+######################
+#apiVersion: contivpp.io/v1
+#kind: ExternalInterface
+#metadata:
+#  name: bm-pg-vpp1-l3-gw
+#spec:
+#  type: L3
+#  network: bm-pg-vpp1-l3
+#  #nodes:
+#  #  - node: bm-wk
+#  #    vppInterfaceName: HundredGigabitEthernet18/0/0
+#  #    # vppctl ip route add 10.101.2.0/24 table 10 via 10.101.100.100 HundredGigabitEthernet18/10/1
+#  #    #ip: 10.101.1.1/24
+#  #    #vlan: 301
+#  #  - node: bm-wk
+#  #    vppInterfaceName: HundredGigabitEthernet18/0/1
+#  #    # vppctl ip route add 10.101.2.0/24 table 10 via 10.101.100.100 HundredGigabitEthernet18/10/1
+#  #    #ip: 10.101.2.1/24
+#  #    #vlan: 301
+

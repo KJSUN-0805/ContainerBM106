@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bm-tester-rx-k8s
+  annotations:
+    v1.multus-cni.io/default-network: default/10-contiv-vpp
+    contivpp.io/custom-if: "tap1/tap/bm-pg-vpp2-l3"
+spec:
+  tolerations:
+  - key: "cmk"
+    operator: Exists
+  containers:
+  - name: bm-tester-rx-k8s
+    #image: bm-pg:5000/trexcisco/trex:latest
+    image: bm-pg:5000/bm-tester:1.0
+    workingDir: /var/trex/v2.65
+    command:
+    - "/bin/bash"
+    - "-c"
+    args:
+    - "sleep 1d"
+    %RESOURCES%
+    securityContext:
+      privileged: true
+    ###  #capabilities:
+    ###  #   add:
+    ###  #     - ALL
+  restartPolicy: Never
+  nodeSelector:
+    kubernetes.io/hostname: bm-wk

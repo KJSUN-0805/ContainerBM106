@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: samplepod-2
+  annotations:
+    k8s.v1.cni.cncf.io/networks: ovs-conf,ovs-net-2
+spec:
+  tolerations:
+  - key: "cmk"
+    operator: Exists
+  containers:
+  - name: samplepod
+    command: ["sleep", "99999"]
+    image: alpine
+    imagePullPolicy: IfNotPresent
+    securityContext:
+        privileged: true
+        capabilities:
+           add:
+             - ALL
+  nodeSelector:
+    kubernetes.io/hostname: bm-wk

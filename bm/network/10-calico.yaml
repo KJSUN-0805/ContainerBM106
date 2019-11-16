@@ -1,0 +1,26 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: 10-calico
+spec: 
+  config: '{
+    "name": "10-calico",
+    "cniVersion": "0.3.1",
+    "plugins": [
+      {
+        "type": "calico",
+        "log_level": "info",
+        "datastore_type": "kubernetes",
+        "nodename": "bm-pg",
+        "mtu": 1440,
+        "ipam": { "type": "calico-ipam" },
+        "policy": { "type": "k8s" },
+        "kubernetes": { "kubeconfig": "/etc/cni/net.d/calico-kubeconfig" }
+      },
+      {
+        "type": "portmap",
+        "snat": true,
+        "capabilities": {"portMappings": true}
+      }
+    ]
+  }'

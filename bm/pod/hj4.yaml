@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: samplepod-4
+  annotations:
+    k8s.v1.cni.cncf.io/networks: 10-contiv-vpp
+spec:
+  tolerations:
+  - key: "cmk"
+    operator: Exists
+  containers:
+  - name: samplepod
+    command: ["sleep", "99999"]
+    image: alpine

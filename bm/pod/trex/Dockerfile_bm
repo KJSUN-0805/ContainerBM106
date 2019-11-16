@@ -1,0 +1,41 @@
+###############################################################
+## image delete and create
+#  docker rmi -f bm-pg:5000/bm-tester:1.0
+#  docker build --tag bm-pg:5000/bm-tester:1.0 -f ./Dockerfile_bm .
+#  docker push bm-pg:5000/bm-tester:1.0
+#  docker images
+#
+## container delete and run, attach
+#  docker rm -f bm_tester
+#  docker run --name bm_tester -h bm_tester --privileged -itd bm-pg:5000/bm-tester:1.0
+#  docker exec -it bm_tester bash
+# 
+###############################################################
+FROM ubuntu:latest
+
+RUN sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
+RUN sed -i 's/security.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
+
+RUN apt-get update -y 
+RUN apt-get -y install python python-pip \
+             wget git \
+			 ethtool \
+             bash \
+             net-tools \
+             netbase \
+             strace \
+             iproute2 \
+             iputils-ping \
+             pciutils \
+			 tcpdump \
+			 qperf \
+             vim
+
+RUN python -m pip install --upgrade pip
+
+RUN mkdir -p /var/trex
+RUN wget --no-cache https://trex-tgn.cisco.com/trex/release/v2.65.tar.gz && \
+    tar -zxvf v2.65.tar.gz -C /var/trex && \
+    chown root:root /var/trex/v2.65
+	
+WORKDIR /var/trex/v2.65

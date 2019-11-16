@@ -1,0 +1,37 @@
+apiVersion: projectcalico.org/v3
+items:
+- apiVersion: projectcalico.org/v3
+  kind: Node
+  metadata:
+    annotations:
+      projectcalico.org/kube-labels: '{"beta.kubernetes.io/arch":"amd64","beta.kubernetes.io/os":"linux","kubernetes.io/arch":"amd64","kubernetes.io/hostname":"bm-pg","kubernetes.io/os":"linux","node-role.kubernetes.io/master":""}'
+    labels:
+      beta.kubernetes.io/arch: amd64
+      beta.kubernetes.io/os: linux
+      kubernetes.io/arch: amd64
+      kubernetes.io/hostname: bm-pg
+      kubernetes.io/os: linux
+      node-role.kubernetes.io/master: ""
+    name: bm-pg
+  spec:
+    bgp:
+      ipv4Address: 10.10.10.252/24
+      ipv4IPIPTunnelAddr: 10.168.41.64
+- apiVersion: projectcalico.org/v3
+  kind: Node
+  metadata:
+    annotations:
+      projectcalico.org/kube-labels: '{"beta.kubernetes.io/arch":"amd64","beta.kubernetes.io/os":"linux","kubernetes.io/arch":"amd64","kubernetes.io/hostname":"bm-wk","kubernetes.io/os":"linux"}'
+    labels:
+      beta.kubernetes.io/arch: amd64
+      beta.kubernetes.io/os: linux
+      kubernetes.io/arch: amd64
+      kubernetes.io/hostname: bm-wk
+      kubernetes.io/os: linux
+    name: bm-wk
+  spec:
+    bgp:
+      ipv4Address: 10.10.10.250/24
+      ipv4IPIPTunnelAddr: 10.168.206.192
+kind: NodeList
+metadata: {}

@@ -1,0 +1,50 @@
+---
+######################
+## network interface
+######################
+##apiVersion: contivpp.io/v1
+##kind: CustomNetwork
+##metadata:
+##  name: bm-pg-vpp1-l2
+##spec:
+##  type: L2
+---
+apiVersion: contivpp.io/v1
+kind: CustomNetwork
+metadata:
+  name: bm-pg-vpp2-l2
+spec:
+  type: L2
+---
+######################
+## external interface
+######################
+##apiVersion: contivpp.io/v1
+##kind: ExternalInterface
+##metadata:
+##  name: bm-pg-vpp1-l2-lan
+##spec:
+##  type: L2
+##  network: bm-pg-vpp1-l2
+##  nodes:
+##    - node: bm-pg
+##      vppInterfaceName: HundredGigabitEthernet5/0/0
+##      vlan: 200
+##    - node: bm-wk
+##      vppInterfaceName: HundredGigabitEthernet18/0/0
+##      vlan: 200
+---
+apiVersion: contivpp.io/v1
+kind: ExternalInterface
+metadata:
+  name: bm-pg-vpp2-l2-lan
+spec:
+  type: L2
+  network: bm-pg-vpp2-l2
+  nodes:
+    - node: bm-pg
+      vppInterfaceName: HundredGigabitEthernet5/0/1
+#      vlan: 201
+    - node: bm-wk
+      vppInterfaceName: HundredGigabitEthernet18/0/1
+#      vlan: 201
